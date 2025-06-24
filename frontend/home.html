@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroSearch AI</title>
+  <meta name="description" content="Advanced AI-powered research platform for cognitive science and academic exploration">
+
+  <!-- Performance Optimizations -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+
+  <!-- Critical CSS (Inlined) -->
+  <style>
+     * {
+      min-width: 0;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--gray-50);
+      color: var(--gray-900);
+      background-image: radial-gradient(circle at 1px 1px, var(--gray-300) 1px, transparent 0);
+      background-size: 24px 24px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, .font-heading {
+      font-family: 'Oxanium', ui-monospace, sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    [data-aos] {
+      transition-property: transform, opacity;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, var(--gray-900), var(--gray-700));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-area {
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+    }
+
+    .upload-area:hover, .upload-area.drag-over {
+      border-color: var(--gray-800);
+      background-color: var(--gray-100);
+    }
+
+    .btn {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+      }
+    }
+
+    .rag-diagram {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 40px 0;
+    }
+
+    .rag-process {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .rag-step {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 2px solid var(--gray-300);
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+
+    .rag-step i {
+      font-size: 28px;
+      color: var(--gray-700);
+    }
+
+    .rag-arrow {
+      font-size: 32px;
+      color: var(--gray-400);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+      .feature-section {
+      background: var(--gray-100);
+      border-radius: 20px;
+      padding: 40px 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .rag-process {
+        gap: 10px;
+      }
+
+      .rag-step {
+        width: 70px;
+        height: 70px;
+      }
+
+      .rag-step i {
+        font-size: 20px;
+      }
+
+      .rag-arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+      }
+    }
+  </style>
+
+  <!-- Deferred Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" media="print" onload="this.media='all'">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col">
+  <header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-300 bg-white/90">
+    <nav class="container px-4">
+      <div class="flex justify-between items-center h-16">
+        <a href="/" class="text-2xl font-heading font-bold gradient-text">
+          NeuroSearch AI
+          <span class="sr-only">Home</span>
+        </a>
+        <div class="flex space-x-4">
+          <a href="#rag-section" class="text-gray-600 hover:text-gray-900 font-medium">About</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1 h-[calc(100vh-4rem)] overflow-y-auto">
+    <section class="py-20 sm:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto" data-aos="fade-up">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-heading leading-tight mb-6">
+            Cognitive Research Interface
+          </h1>
+          <h3>
+          <p class="text-lg text-gray-600 mt-0">
+            Accelerate your research with intelligent insights and analysis
+          </p>
+            </h3>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 mt-12" data-aos="fade-up" data-aos-delay="100">
+
+          <!-- ArXiv Analysis Card -->
+          <article class="group relative bg-white rounded-xl p-6 transition-all hover:transform hover:-translate-y-2 shadow-sm hover:shadow-md border border-gray-300">
+            <div class="flex flex-col h-full">
+              <div class="mb-4 text-center">
+                <div class="w-16 h-16 rounded-lg bg-gray-200 flex items-center justify-center text-2xl mb-4 mx-auto group-hover:scale-105">
+                  <i class="fas fa-microscope" aria-hidden="true"></i>
+                </div>
+                <h3 class="text-xl font-semibold font-heading">ArXiv Papers</h3>
+              </div>
+              <h3>
+              <p class="text-gray-600 mb-4 flex-1 text-center">
+                Deep analysis of scientific papers with AI-powered insights
+              </p>
+              </h3>
+              <a href="arxiv_research/explorepapers.html" class="mt-8">
+                <button class="w-full py-3 px-4 bg-black text-white rounded-xl transition-all hover:bg-gray-200 hover:text-black font-medium text-center font-heading
+                            focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group-hover:scale-105">
+                  Explore Papers
+                </button>
+              </a>
+            </div>
+          </article>
+
+          <!-- PDF Upload Card -->
+          <article class="group relative bg-white rounded-xl p-6 transition-all hover:transform hover:-translate-y-2 shadow-sm hover:shadow-md border border-gray-300">
+            <div class="flex flex-col h-full">
+              <div class="mb-4 text-center">
+                <div class="w-16 h-16 rounded-lg bg-gray-200 flex items-center justify-center text-2xl mb-4 mx-auto group-hover:scale-105">
+                  <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                </div>
+                <h3 class="text-xl font-semibold font-heading">PDF Upload</h3>
+              </div>
+              <div class="flex-1 mb-4">
+                <label class="flex flex-col items-center justify-center h-full border-2 border-dashed border-gray-300 rounded-xl transition-all hover:border-black cursor-pointer p-6 text-center group-hover:scale-105">
+                  <input type="file" id="neuro-upload" class="hidden" accept=".pdf">
+                  <i class="fas fa-file-import text-3xl mb-3" aria-hidden="true"></i>
+                  <span class="text-gray-600 text-sm font-heading">
+                    <span class="text-black-600 font-medium font-heading">Click to upload</span> or drag and drop
+                  </span>
+                  <span class="text-xs text-gray-500 mt-1 font-heading">PDF up to 50MB</span>
+                </label>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+  <section class="py-12 bg-gray-100" id="rag-section">
+    <div class="container">
+      <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+        <h2 class="text-3xl md:text-4xl font-heading mb-6">Retrieval-Augmented Generation (RAG)</h2>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+          The AI system combines document retrieval with large language models to provide accurate answers to your research questions
+        </p>
+      </div>
+
+      <!-- RAG Process Visualization -->
+      <div class="rag-diagram fade-in">
+        <div class="rag-process">
+          <div class="rag-step">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="rag-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="rag-step">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="rag-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="rag-step">
+            <i class="fas fa-brain"></i>
+          </div>
+          <div class="rag-arrow">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="rag-step">
+            <i class="fas fa-comment-alt"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mb-10">
+        <div class="inline-flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+          <span class="px-4 py-2 bg-white border border-gray-300 rounded-full text-sm font-medium">1. Input Document</span>
+          <span class="px-4 py-2 bg-white border border-gray-300 rounded-full text-sm font-medium">2. Create Embeddings</span>
+          <span class="px-4 py-2 bg-white border border-gray-300 rounded-full text-sm font-medium">3. Retrieve Information</span>
+          <span class="px-4 py-2 bg-white border border-gray-300 rounded-full text-sm font-medium">4. Answer Questions</span>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 mt-8">
+        <!-- ArXiv RAG Card -->
+        <div class="bg-white rounded-2xl border border-gray-300 overflow-hidden card-hover">
+          <div class="p-8">
+            <div class="flex items-start mb-6">
+              <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center text-2xl mr-5">
+                <i class="fas fa-book-open text-gray-700"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-heading font-bold">ArXiv Paper Analysis</h3>
+                <div class="mt-1 inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                  RAG System
+                </div>
+              </div>
+            </div>
+
+            <p class="text-gray-600 mb-6">
+              Select any ArXiv research paper and ask questions about its content. The AI will:
+            </p>
+
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Retrieve relevant information from the paper</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Generate accurate answers to your specific questions</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Provide citations from the original document</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Explain complex concepts in simple terms</span>
+              </li>
+            </ul>
+
+            <div class="bg-gray-100 p-4 rounded-lg border border-gray-300">
+              <div class="font-medium text-gray-700 mb-2">Example Questions:</div>
+              <div class="text-sm text-gray-600 space-y-1">
+                <div class="flex">
+                  <span class="text-gray-500 mr-2">•</span>
+                  "What methodology did the authors use in section 3.2?"
+                </div>
+                <div class="flex">
+                  <span class="text-gray-500 mr-2">•</span>
+                  "Summarize the key findings of this paper"
+                </div>
+                <div class="flex">
+                  <span class="text-gray-500 mr-2">•</span>
+                  "How does this approach compare to previous work?"
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Document RAG Card -->
+        <div class="bg-white rounded-2xl border border-gray-300 overflow-hidden card-hover">
+          <div class="p-8">
+            <div class="flex items-start mb-6">
+              <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center text-2xl mr-5">
+                <i class="fas fa-file-upload text-gray-700"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-heading font-bold">Document Analysis</h3>
+                <div class="mt-1 inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                  RAG System
+                </div>
+              </div>
+            </div>
+
+            <p class="text-gray-600 mb-6">
+              Upload your own documents (PDF) and get AI-powered insights:
+            </p>
+
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Ask questions about your personal documents</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Extract key information from lengthy files</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Get summaries of complex documents</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-black-500 mt-1 mr-3"></i>
+                <span>Find answers without reading entire documents</span>
+              </li>
+            </ul>
+
+            <div class="bg-gray-100 p-4 rounded-lg border border-gray-300">
+              <div class="font-medium text-gray-700 mb-2">Example Questions:</div>
+              <div class="text-sm text-gray-600 space-y-1">
+                <div class="flex">
+                  <span class="text-gray-500 mr-2">•</span>
+                  "What are the main recommendations in this report?"
+                </div>
+                <div class="flex">
+                  <span class="text-gray-500 mr-2">•</span>
+                  "What were the contract payment terms"
+                </div>
+                <div class="flex">
+                  <span class="text-gray-500 mr-2">•</span>
+                  "Summarize the key points of this section"
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RAG Explanation -->
+      <div class="mt-4 bg-white rounded-2xl border border-gray-300 p-8 max-w-3xl mx-auto">
+        <h3 class="text-2xl font-heading font-bold text-center mb-6">How the RAG System Works</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="flex">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 mr-4">
+                1
+              </div>
+            </div>
+            <div>
+              <h4 class="font-heading font-bold text-lg mb-2">Document Processing</h4>
+              <p class="text-gray-600">Your documents are securely processed and indexed for efficient information retrieval.</p>
+            </div>
+          </div>
+
+          <div class="flex">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 mr-4">
+                2
+              </div>
+            </div>
+            <div>
+              <h4 class="font-heading font-bold text-lg mb-2">Question Analysis</h4>
+              <p class="text-gray-600">The AI understands your question and determines what information is needed.</p>
+            </div>
+          </div>
+
+          <div class="flex">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 mr-4">
+                3
+              </div>
+            </div>
+            <div>
+              <h4 class="font-heading font-bold text-lg mb-2">Information Retrieval</h4>
+              <p class="text-gray-600">Relevant sections are retrieved from the document based on your question.</p>
+            </div>
+          </div>
+
+          <div class="flex">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 mr-4">
+                4
+              </div>
+            </div>
+            <div>
+              <h4 class="font-heading font-bold text-lg mb-2">Response Generation</h4>
+              <p class="text-gray-600">A large language model synthesizes the retrieved information into a clear answer.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+    <a href="https://github.com/ratul-d/NeuroSearch-AI"
+       target="_blank"
+       class="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors">
+      <i class="fab fa-github mr-2"></i>
+      For a deeper technical understanding, view the GitHub repository
+    </a>
+  </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-300 py-12">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-lg font-heading font-bold mb-4">NeuroSearch AI</h3>
+          <p class="text-gray-600 text-sm">Advanced AI platform for accelerating cognitive science research and academic exploration.</p>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4">Features</h4>
+          <ul class="space-y-2">
+            <li><a  class="text-gray-600 hover:text-gray-900 text-sm">Paper Analysis</a></li>
+            <li><a  class="text-gray-600 hover:text-gray-900 text-sm">PDF Processing</a></li>
+            <li><a  class="text-gray-600 hover:text-gray-900 text-sm">Research Assistant</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4"></h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4">Github</h4>
+          <div class="flex space-x-4">
+            <a href="https://github.com/ratul-d/NeuroSearch-AI" target="_blank" class="text-gray-600 hover:text-gray-900"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-300 mt-12 pt-8 text-center">
+        <p class="text-gray-600 text-sm">Project developed for IBM GenAI Certification.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" async></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 600,
+        once: true,
+        easing: 'ease-out-cubic'
+      });
+
+      // File Upload Handling
+      const uploadInput = document.getElementById('neuro-upload');
+      uploadInput.addEventListener('change', handleFileUpload);
+
+      function handleFileUpload(e) {
+        const file = e.target.files[0];
+        if (file && file.type === 'application/pdf') {
+          const formData = new FormData();
+          formData.append('file', file);
+
+          fetch('/upload', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.file_id) {
+              window.location.href = `pdfupload.html?file=${data.file_id}`;
+            }
+          })
+          .catch(error => console.error('Upload error:', error));
+        }
+      }
+    });
+  </script>
+</body>
+</html>
