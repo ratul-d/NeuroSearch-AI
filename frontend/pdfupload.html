@@ -648,6 +648,15 @@
 
       ws.onmessage = function(event) {
         appendMessage(event.data, "system");
+
+        // if any error comes back, reload
+        if (event.data.includes("An error occurred")) {
+          // show the error, then refresh
+          console.warn("Error received from server, reloading…");
+          setTimeout(() => window.location.reload(), 1000);
+          return;
+        }
+        
         if (event.data.includes("Ready for Q&A!\n🔹 Ask a question about the paper:")) {
           userInput.disabled = false;
           sendButton.disabled = false;
