@@ -657,6 +657,15 @@
       ws.onmessage = function(event) {
         appendMessage(event.data, "system");
 
+        // If the server signals an error, reload the page after a brief delay
+        if (event.data.includes("An error occurred")) {
+          console.warn("WebSocket error received, reloading page...");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);  // 1 second delay so the user sees the error message
+          return;      // skip the “ready” check
+        }
+        
         // Check for the ready message and enable input
         if (event.data.includes("Ready for Q&A!\n🔹 Ask a question about the paper:")) {
           enableInput();
