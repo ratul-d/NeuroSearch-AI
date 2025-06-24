@@ -436,7 +436,7 @@
         `;
 
         try {
-          const response = await fetch(`http://localhost:8000/search?query=${encodeURIComponent(query)}`);
+          const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
           const data = await response.json();
