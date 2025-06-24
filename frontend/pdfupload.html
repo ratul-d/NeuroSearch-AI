@@ -600,7 +600,8 @@
       }
 
       // Establish a WebSocket connection to /ws including the file id
-      const wsUrl = "ws://" + window.location.host + "/wsu?file=" + fileId;
+      const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+      const wsUrl = `${scheme}://${window.location.host}/wsu?file=${fileId}`;
       const ws = new WebSocket(wsUrl);
       const chatMessages = document.getElementById("chatMessages");
       const userInput = document.getElementById("userInput");
