@@ -587,15 +587,18 @@
       });
 
       // Set PDF from localStorage
-      const pdfLink = localStorage.getItem('selectedPaperLink');
+      let pdfLink = localStorage.getItem('selectedPaperLink');
       if (pdfLink) {
+        // If it was stored as http://, swap to https:// so browsers will load it on an HTTPS page
+        if (pdfLink.startsWith('http://')) {
+          pdfLink = pdfLink.replace('http://', 'https://');
+        }
         document.getElementById('pdfViewer').src = pdfLink;
       }
 
       // Establish WebSocket connection
-      const wsUrl = pdfLink
-        ? "ws://localhost:8000/ws?pdfLink=" + encodeURIComponent(pdfLink)
-        : "ws://localhost:8000/ws";
+      const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+      const wsUrl   = `${scheme}://${window.location.host}/ws?pdfLink=${encodeURIComponent(pdfLink)}`;
 
       const ws = new WebSocket(wsUrl);
       const chatMessages = document.getElementById("chatMessages");
