@@ -1,0 +1,12 @@
+arxiv==2.1.3
+faiss_cpu==1.10.0
+fastapi==0.115.8
+groq==0.20.0
+langchain==0.3.25
+numpy==1.26.4
+openai==1.70.0
+pymupdf4llm==0.0.19
+python-dotenv==1.1.0
+Requests==2.32.3
+uvicorn[standard]
+python-multipart

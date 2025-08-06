@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroSearch AI | Research Results</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" async></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+      --blue-500: #3b82f6;
+      --blue-600: #2563eb;
+      --green-500: #10b981;
+    }
+
+    * {
+      min-width: 0;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--gray-50);
+      color: var(--gray-900);
+      background-image: radial-gradient(circle at 1px 1px, var(--gray-300) 1px, transparent 0);
+      background-size: 24px 24px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, .font-heading {
+      font-family: 'Oxanium', ui-monospace, sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 80%;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, var(--gray-900), var(--gray-700));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid var(--gray-300);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      background: var(--gray-900);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Oxanium', sans-serif;
+    }
+
+    .btn:hover {
+      background: var(--gray-800);
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--gray-300);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 0 1rem;
+    }
+
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: 'Oxanium', sans-serif;
+      background: linear-gradient(to right, var(--gray-900), var(--gray-700));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      height: calc(100vh - 5rem);
+      padding: 1.5rem 0;
+      max-width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-panel {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid var(--gray-300);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .panel-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      font-family: 'Oxanium', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: var(--gray-900);
+      color: white;
+      border-top-right-radius: 0.25rem;
+    }
+
+    .system-message {
+      align-self: flex-start;
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-top-left-radius: 0.25rem;
+    }
+
+    .input-area {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      gap: 0.75rem;
+      position: relative;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 0.875rem 1.25rem;
+      border-radius: 0.75rem;
+      border: 1px solid var(--gray-300);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .input-field:disabled {
+      background: var(--gray-100);
+      cursor: not-allowed;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--blue-500);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .send-btn {
+      background: var(--gray-900);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Oxanium', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .send-btn:disabled {
+      background: var(--gray-400);
+      cursor: not-allowed;
+    }
+
+    .send-btn:not(:disabled):hover {
+      background: var(--gray-800);
+    }
+
+    .pdf-viewer {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid var(--gray-300);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .disclaimer {
+      padding: 0.75rem 1.5rem;
+      background: var(--gray-100);
+      border-top: 1px solid var(--gray-200);
+      font-size: 0.75rem;
+      color: var(--gray-600);
+      text-align: center;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--gray-100);
+      border-radius: 2rem;
+      font-size: 0.875rem;
+      color: var(--gray-700);
+    }
+
+    .indicator-dot {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background: var(--gray-400);
+    }
+
+    .indicator-dot.connected {
+      background: var(--green-500);
+    }
+
+    .whitespace-pre-wrap {
+      white-space: pre-wrap;
+    }
+
+    strong {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .ready-state-banner {
+      position: absolute;
+      top: -32px;
+      left: 0;
+      right: 0;
+      background: var(--green-500);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: transform 0.3s ease;
+      transform: translateY(100%);
+      z-index: 10;
+    }
+
+    .ready-state-banner.active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .pdf-viewer {
+        height: 500px;
+      }
+
+      .ready-state-banner {
+        top: -28px;
+      }
+    }
+
+
+    .nav-container {
+      max-width: 83%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 4rem;
+      padding: 0; /* Add padding here */
+    }
+
+    /* Footer styles */
+    footer {
+      background: white;
+      border-top: 1px solid var(--gray-300);
+      padding: 3rem 0;
+    }
+
+    .footer-container {
+      max-width: 83%;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: repeat(4, 1fr);
+        /* Align all items to the top */
+        align-items: flex-start;
+      }
+    }
+
+    .footer-heading {
+      font-family: 'Oxanium', sans-serif;
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 1rem;
+      color: var(--gray-900);
+      /* Ensure consistent margin */
+      margin-top: 0;
+    }
+
+    .footer-text {
+      color: var(--gray-600);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      /* Add consistent spacing */
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-list a {
+      color: var(--gray-600);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s ease;
+      display: block;
+    }
+
+    .footer-list a:hover {
+      color: var(--gray-900);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .footer-social a {
+      color: var(--gray-600);
+      font-size: 1.25rem;
+      transition: color 0.2s ease;
+    }
+
+    .footer-social a:hover {
+      color: var(--gray-900);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--gray-300);
+      margin-top: 3rem;
+      padding-top: 2rem;
+      text-align: center;
+    }
+
+    .footer-bottom-text {
+      color: var(--gray-600);
+      font-size: 0.75rem;
+    }
+
+    /* Consistent spacing for all columns */
+    .footer-column {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* Add consistent top spacing for all columns */
+    .footer-grid > div {
+      padding-top: 0.5rem;
+    }
+
+    /* Fix for empty column */
+    .footer-grid > div:empty {
+      display: none;
+    }
+
+    /* NEW: Navigation styles */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: var(--gray-600);
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .nav-link:hover {
+      color: var(--gray-900);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="nav-container">
+      <a href="/" class="logo">NeuroSearch AI</a>
+      <div class="nav-right">
+        <a href="/" class="nav-link">Home</a>
+        <div class="status-indicator">
+          <div class="indicator-dot" id="connectionStatus"></div>
+          <span id="statusText">Connecting...</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="content-grid">
+      <!-- Left Panel: Chat Section -->
+      <div class="panel">
+        <div class="cyber-card chat-panel">
+          <div class="panel-header">Research Assistant</div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="message system-message">
+              <p>Welcome to NeuroSearch AI Research Assistant. I'm analyzing your research paper and will be ready to answer questions shortly.
+                This can take a while if the pdf is large (>10 pages).</p>
+            </div>
+          </div>
+          <div class="input-area">
+            <input type="text" id="userInput" disabled
+                   class="input-field"
+                   placeholder="Please wait for analysis to complete...">
+            <button id="sendButton" disabled class="send-btn cyber-button-primary">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+          <div class="disclaimer">
+            NeuroSearch AI can make mistakes. Verify important information.
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: PDF Viewer -->
+      <div class="panel">
+        <div class="cyber-card pdf-viewer">
+          <iframe id="pdfViewer" class="pdf-frame"></iframe>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div>
+          <h3 class="footer-heading">NeuroSearch AI</h3>
+          <p class="footer-text">Advanced AI platform for accelerating cognitive science research and academic exploration.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Features</h4>
+          <ul class="footer-list">
+            <li><a>Paper Analysis</a></li>
+            <li><a>PDF Processing</a></li>
+            <li><a>Research Assistant</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading"></h4>
+          <ul class="footer-list">
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Github</h4>
+          <div class="footer-social">
+            <a href="https://github.com/ratul-d/NeuroSearch-AI" target="_blank"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-bottom-text">Project developed for IBM GenAI Certification.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 600,
+        once: true,
+        easing: 'ease-out-cubic'
+      });
+
+      // Helper to get query parameters (file id)
+      function getQueryParam(param) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(param);
+      }
+
+      // Set up the PDF viewer using the file id from the URL.
+      const fileId = getQueryParam("file");
+      const pdfViewer = document.getElementById('pdfViewer');
+      if(fileId) {
+        pdfViewer.src = "/files/" + fileId;
+      }
+
+      // Establish a WebSocket connection to /ws including the file id
+      const scheme = window.location.protocol === "https:" ? "wss" : "ws";
+      const wsUrl = `${scheme}://${window.location.host}/wsu?file=${fileId}`;
+      const ws = new WebSocket(wsUrl);
+      const chatMessages = document.getElementById("chatMessages");
+      const userInput = document.getElementById("userInput");
+      const sendButton = document.getElementById("sendButton");
+      const statusIndicator = document.getElementById("connectionStatus");
+      const statusText = document.getElementById("statusText");
+
+      // Update connection status
+      function updateStatus(connected) {
+        statusIndicator.className = 'indicator-dot ' + (connected ? 'connected' : '');
+        statusText.textContent = connected ? 'Connected' : 'Disconnected';
+
+        if (!connected) {
+          userInput.disabled = true;
+          sendButton.disabled = true;
+          userInput.placeholder = "Connection lost...";
+        }
+      }
+
+      function appendMessage(message, sender = "system") {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", sender === "system" ? "system-message" : "user-message");
+
+        const formattedMessage = DOMPurify.sanitize(
+          message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        );
+
+        messageDiv.innerHTML = `<div class="whitespace-pre-wrap">${formattedMessage}</div>`;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      ws.onopen = function() {
+        updateStatus(true);
+      };
+
+      ws.onclose = function() {
+        updateStatus(false);
+      };
+
+      ws.onerror = function() {
+        updateStatus(false);
+      };
+
+      ws.onmessage = function(event) {
+        appendMessage(event.data, "system");
+
+        // if any error comes back, reload
+        if (event.data.includes("An error occurred")) {
+          // show the error, then refresh
+          console.warn("Error received from server, reloading…");
+          setTimeout(() => window.location.reload(), 1000);
+          return;
+        }
+
+        if (event.data.includes("Ready for Q&A!\n🔹 Ask a question about the paper:")) {
+          userInput.disabled = false;
+          sendButton.disabled = false;
+          userInput.placeholder = "Type your research question...";
+        }
+      };
+
+      function sendQuery() {
+        const query = userInput.value.trim();
+        if (query !== "") {
+          appendMessage(query, "user");
+          ws.send(query);
+          userInput.value = "";
+        }
+      }
+
+      sendButton.addEventListener("click", sendQuery);
+      userInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") sendQuery();
+      });
+    });
+  </script>
+</body>
+</html>

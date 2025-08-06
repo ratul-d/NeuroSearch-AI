@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroSearch AI | ArXiv Papers</title>
+
+  <!-- Performance Optimizations -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+
+  <!-- Critical CSS (Inlined) -->
+  <style>
+    * {
+      min-width: 0;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--gray-50);
+      color: var(--gray-900);
+      background-image: radial-gradient(circle at 1px 1px, var(--gray-300) 1px, transparent 0);
+      background-size: 24px 24px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, .font-heading {
+      font-family: 'Oxanium', ui-monospace, sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    [data-aos] {
+      transition-property: transform, opacity;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, var(--gray-900), var(--gray-700));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1.25rem 1.5rem;
+      border: 2px solid var(--gray-300);
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--gray-600);
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 46px;
+      width: 46px;
+      border-radius: 10px;
+      background: var(--gray-800);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-btn:hover {
+      background: var(--gray-900);
+    }
+
+    .paper-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--gray-200);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .paper-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      border-color: var(--gray-300);
+    }
+
+    .paper-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--gray-900);
+    }
+
+    .paper-authors {
+      color: var(--gray-600);
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .paper-summary {
+      color: var(--gray-700);
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .paper-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .paper-category {
+      background: var(--gray-100);
+      color: var(--gray-700);
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .paper-link {
+      color: var(--gray-700);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .paper-link:hover {
+      color: var(--gray-900);
+      text-decoration: underline;
+    }
+
+    .paper-link i {
+      margin-right: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .results-container {
+      min-height: 500px;
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      text-align: center;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      color: var(--gray-300);
+      margin-bottom: 1.5rem;
+    }
+
+    .empty-state p {
+      color: var(--gray-600);
+      max-width: 400px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+    }
+
+    .loading-spinner {
+      border: 4px solid var(--gray-200);
+      border-top: 4px solid var(--gray-700);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading p {
+      color: var(--gray-600);
+      font-size: 1.1rem;
+    }
+
+    .error-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      text-align: center;
+    }
+
+    .error-state i {
+      font-size: 3rem;
+      color: #ef4444;
+      margin-bottom: 1.5rem;
+    }
+
+    .error-state p {
+      color: var(--gray-600);
+      max-width: 400px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+  </style>
+
+  <!-- Deferred Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" media="print" onload="this.media='all'">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col">
+  <header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-300 bg-white/90">
+    <nav class="container px-4">
+      <div class="flex justify-between items-center h-16">
+        <a href="/" class="text-2xl font-heading font-bold gradient-text">
+          NeuroSearch AI
+          <span class="sr-only">Home</span>
+        </a>
+        <div class="flex space-x-4">
+          <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1 py-12">
+    <div class="container">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12 fade-in" data-aos="fade-up">
+          <h1 class="text-3xl md:text-4xl font-heading mb-4">
+            Explore ArXiv Papers
+          </h1>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Search the latest research papers from ArXiv and analyze them with AI-powered insights
+          </p>
+        </div>
+
+        <div class="search-container fade-in" data-aos="fade-up" data-aos-delay="100">
+          <input
+            id="searchInput"
+            type="text"
+            class="search-input"
+            placeholder="Search ArXiv papers by topic to research..."
+          />
+          <button id="searchBtn" class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+
+        <div id="resultsContainer" class="results-container fade-in" data-aos="fade-up" data-aos-delay="200">
+          <div class="empty-state">
+            <i class="fas fa-file-alt"></i>
+            <p>Search for papers on any topic to get started.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-300 py-12">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-lg font-heading font-bold mb-4">NeuroSearch AI</h3>
+          <p class="text-gray-600 text-sm">Advanced AI platform for accelerating cognitive science research and academic exploration.</p>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4">Features</h4>
+          <ul class="space-y-2">
+            <li><a  class="text-gray-600 hover:text-gray-900 text-sm">Paper Analysis</a></li>
+            <li><a  class="text-gray-600 hover:text-gray-900 text-sm">PDF Processing</a></li>
+            <li><a  class="text-gray-600 hover:text-gray-900 text-sm">Research Assistant</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4"></h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4">Github</h4>
+          <div class="flex space-x-4">
+            <a href="https://github.com/ratul-d/NeuroSearch-AI" target="_blank" class="text-gray-600 hover:text-gray-900"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-300 mt-12 pt-8 text-center">
+        <p class="text-gray-600 text-sm">Project developed for IBM GenAI Certification.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" async></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 600,
+        once: true,
+        easing: 'ease-out-cubic'
+      });
+
+      // Search functionality
+      const searchBtn = document.getElementById('searchBtn');
+      const searchInput = document.getElementById('searchInput');
+      const resultsContainer = document.getElementById('resultsContainer');
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') searchBtn.click();
+      });
+
+      searchBtn.addEventListener('click', async () => {
+        const query = searchInput.value.trim();
+        if (!query) return;
+
+        resultsContainer.innerHTML = `
+          <div class="loading">
+            <div class="loading-spinner"></div>
+            <p>Searching ArXiv papers...</p>
+          </div>
+        `;
+
+        try {
+          const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+
+          if (data.results && data.results.length > 0) {
+            let papersHTML = '';
+            data.results.forEach(paper => {
+              const authors = paper.authors?.join(', ') || 'Unknown author';
+
+              papersHTML += `
+                <div class="paper-card" data-pdf-url="${paper.pdf_url}">
+                  <h3 class="paper-title">${paper.title}</h3>
+                  <p class="paper-authors">${authors}</p>
+                  <p class="paper-summary">${paper.summary}</p>
+                  <div class="paper-meta">
+                    <span class="paper-category">${paper.categories}</span>
+                    <div>
+                      <span class="mr-4">${paper.published}</span>
+                      <a href="${paper.pdf_url}" target="_blank" rel="noopener noreferrer"
+                         class="paper-link pdf-link">
+                        <i class="fas fa-download"></i>PDF
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+
+            resultsContainer.innerHTML = papersHTML;
+
+            // Add click event to paper cards
+            document.querySelectorAll('.paper-card').forEach(card => {
+              card.addEventListener('click', function(e) {
+                // Prevent navigation when clicking on the PDF link
+                if (e.target.closest('.pdf-link')) return;
+
+                // Get the PDF URL from data attribute
+                const pdfUrl = this.getAttribute('data-pdf-url');
+                localStorage.setItem('selectedPaperLink', pdfUrl);
+                window.location.href = 'researchpaper.html';
+              });
+            });
+          } else {
+            resultsContainer.innerHTML = `
+              <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <p>No papers found for your search. Try a different topic or keyword.</p>
+              </div>
+            `;
+          }
+        } catch (error) {
+          resultsContainer.innerHTML = `
+            <div class="error-state">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>Error: ${error.message}</p>
+            </div>
+          `;
+          console.error('Search error:', error);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
