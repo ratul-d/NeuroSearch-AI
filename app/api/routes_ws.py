@@ -29,12 +29,27 @@ async def websocket_endpoint(websocket: WebSocket):
         faiss_index, stored_chunks = build_faiss_index(text_chunks, embed_model)
         await websocket.send_text("Ready for Q&A!\n🔹 Ask a question about the paper:")
 
+        chat_history = []
+
         # Process incoming queries from the client
         while True:
             query = await websocket.receive_text()
             await websocket.send_text("Processing your query...")
+
+            full_context = "\n".join(
+                [f"User: {q}\nBot: {a}" for q, a in chat_history[-3:]]
+            )
+
             relevant_chunks = search_faiss(query, faiss_index, stored_chunks, embed_model)
-            answer = ask_llama_3_70b(query, relevant_chunks)
+
+            combined_context = full_context + "\n" + "\n".join(relevant_chunks)
+
+            answer = ask_llama_3_70b(query, [combined_context])
+
+            chat_history.append((query, answer))
+            if len(chat_history) > 3:
+                chat_history = chat_history[-3:]
+
             result_message = "Answer:\n" + answer
             await websocket.send_text(result_message)
     except WebSocketDisconnect:
@@ -68,12 +83,26 @@ async def websocket_endpoint(websocket: WebSocket):
         faiss_index, stored_chunks = build_faiss_index(text_chunks, embed_model)
         await websocket.send_text("Ready for Q&A!\n🔹 Ask a question about the paper:")
 
+        wsu_chat_history=[]
         # Process incoming queries
         while True:
             query = await websocket.receive_text()
             await websocket.send_text("Processing your query...")
+
+            full_context = "\n".join(
+                [f"User: {q}\nBot: {a}" for q, a in wsu_chat_history[-3:]]
+            )
+
             relevant_chunks = search_faiss(query, faiss_index, stored_chunks, embed_model)
-            answer = ask_llama_3_70b(query, relevant_chunks)
+
+            combined_context = full_context + "\n" + "\n".join(relevant_chunks)
+
+            answer = ask_llama_3_70b(query, [combined_context])
+
+            wsu_chat_history.append((query, answer))
+            if len(wsu_chat_history) > 3:
+                wsu_chat_history = wsu_chat_history[-3:]
+
             result_message = "Answer:\n" + answer
             await websocket.send_text(result_message)
     except WebSocketDisconnect:
