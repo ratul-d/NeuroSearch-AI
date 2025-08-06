@@ -8,12 +8,15 @@
 
 NeuroSearch AI combines modern NLP tools and scalable architecture components:
 
-* **Frontend**: HTML, TailwindCSS, JavaScript
-* **Backend**: Python FastAPI
-* **Embedding Model**: `text-embedding-3-large` (OpenAI)
-* **LLM**: `llama-3.1-8b-instant` served via Groq
-* **Vector DB**: FAISS
-* **Hosting**: Render
+| Component   | Technology                          |
+|-------------|-------------------------------------|
+| Frontend    | HTML, TailwindCSS, JavaScript       |
+| Backend     | Python FastAPI                      |
+| Embedding   | `text-embedding-3-large` (OpenAI)   |
+| LLM         | `llama-3.1-8b-instant` via Groq     |
+| Vector DB   | FAISS                               |
+| Hosting     | Render                              |
+
 
 
 
