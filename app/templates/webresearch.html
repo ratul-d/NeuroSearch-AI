@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeuroSearch AI | Web Research Agent</title>
+  <meta name="description" content="Advanced AI-powered research platform for cognitive science and academic exploration">
+
+  <!-- Performance Optimizations -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <!-- Critical CSS (Inlined) -->
+  <style>
+    * {
+      min-width: 0;
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gray-50: #fafafa;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-300: #d4d4d4;
+      --gray-400: #a3a3a3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--gray-50);
+      color: var(--gray-900);
+      background-image: radial-gradient(circle at 1px 1px, var(--gray-300) 1px, transparent 0);
+      background-size: 24px 24px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, .font-heading {
+      font-family: 'Oxanium', ui-monospace, sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    [data-aos] {
+      transition-property: transform, opacity;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, var(--gray-900), var(--gray-700));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-area {
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+    }
+
+    .upload-area:hover, .upload-area.drag-over {
+      border-color: var(--gray-800);
+      background-color: var(--gray-100);
+    }
+
+    .btn {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .cyber-card {
+      background: white;
+      border: 1px solid var(--gray-300);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .cyber-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .cyber-button-primary {
+      background: black;
+      color: white;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cyber-button-primary:hover {
+      background: var(--gray-800);
+      transform: translateY(-1px);
+    }
+
+    .cyber-button-primary::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+
+    .cyber-button-primary:hover::after {
+      left: 100%;
+    }
+
+    input.cyber-border {
+      border: 1px solid var(--gray-300);
+      border-radius: 10px;
+      padding: 14px 16px;
+      background: white;
+      transition: all 0.3s ease;
+    }
+
+    input.cyber-border:focus {
+      outline: none;
+      border-color: var(--gray-600);
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+    }
+
+    input.cyber-border:hover {
+      border-color: var(--gray-400);
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-300 bg-white/90">
+    <nav class="container px-4">
+      <div class="flex justify-between items-center h-16">
+        <a href="/" class="text-2xl font-heading font-bold gradient-text">
+          NeuroSearch AI
+          <span class="sr-only">Home</span>
+        </a>
+        <span class="text-xs font-bold bg-gray-200 text-gray-700 px-3 py-1 rounded-full flex items-center gap-1">
+          <i class="fas fa-flask text-xs"></i>
+          EXPERIMENTAL
+        </span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1 py-12">
+    <div class="container">
+      <section class="py-12 space-y-12">
+        <div data-aos="fade-up" class="max-w-4xl mx-auto text-center">
+          <h2 class="text-4xl md:text-5xl font-heading mb-6 gradient-text leading-tight">
+            Deep Research Web Agent
+          </h2>
+          <p class="text-lg text-gray-600 font-light">Enter your research topic to generate a comprehensive AI-powered research report</p>
+        </div>
+
+        <div class="max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+          <form id="researchForm" class="space-y-6">
+            <div class="cyber-card group relative p-1 rounded-xl transition-all">
+              <input
+                type="text"
+                id="researchTopic"
+                class="w-full py-5 px-6 text-lg focus:outline-none placeholder-gray-400 rounded-xl cyber-border"
+                placeholder="Enter research topic (e.g., 'Neural Style Transfer')"
+                required
+              >
+            </div>
+            <button class="w-full py-3 px-4 bg-black text-white rounded-xl transition-all hover:bg-gray-200 hover:text-black font-medium text-center font-heading
+                            focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group-hover:scale-105">
+              <i class="fas fa-search"></i>
+              Generate Research Report
+            </button>
+          </form>
+        </div>
+
+        <div id="outputContainer" class="max-w-4xl mx-auto hidden" data-aos="fade-up" data-aos-delay="300">
+          <div class="cyber-card group relative p-8 rounded-xl transition-all">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-2xl font-semibold font-heading">AI Research Report</h3>
+              <button class="w-20px py-2 px-5 bg-black text-white rounded-xl transition-all hover:bg-gray-200 hover:text-black font-medium text-center font-heading
+                            focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group-hover:scale-105" onclick="downloadReport()">
+                <i class="fas fa-download mr-2"></i>PDF
+              </button>
+            </div>
+            <div id="researchOutput" class="space-y-6 text-gray-700 leading-relaxed">
+              <!-- AI generated content will be inserted here -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-300 py-12">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-lg font-heading font-bold mb-4">NeuroSearch AI</h3>
+          <p class="text-gray-600 text-sm">Advanced AI platform for accelerating research and academic exploration.</p>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4">Features</h4>
+          <ul class="space-y-2">
+            <li><a class="text-gray-600 hover:text-gray-900 text-sm">Web Research</a></li>
+            <li><a class="text-gray-600 hover:text-gray-900 text-sm">Report Generation</a></li>
+            <li><a class="text-gray-600 hover:text-gray-900 text-sm">PDF Export</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4"></h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+            <li><a href="#" class="text-gray-600 hover:text-gray-900 text-sm"></a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-heading font-semibold mb-4">Github</h4>
+          <div class="flex space-x-4">
+            <a href="https://github.com/ratul-d/NeuroSearch-AI" target="_blank" class="text-gray-600 hover:text-gray-900"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-300 mt-12 pt-8 text-center">
+        <p class="text-gray-600 text-sm">Project developed for IBM GenAI Certification.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: 'ease-out-quad'
+    });
+
+    // Set marked options
+    marked.setOptions({ breaks: true });
+
+    // Form submission handler
+    document.getElementById('researchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const topic = document.getElementById('researchTopic').value;
+      const outputContainer = document.getElementById('outputContainer');
+      const researchOutput = document.getElementById('researchOutput');
+
+      outputContainer.classList.remove('hidden');
+      researchOutput.innerHTML = `
+        <div class="text-center py-8">
+          <i class="fas fa-spinner fa-spin text-3xl text-gray-600"></i>
+          <p class="mt-4 text-gray-600">Analyzing "${topic}"...</p>
+        </div>
+      `;
+
+      fetch('/research', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: topic })
+      })
+      .then(response => response.json())
+      .then(data => {
+        researchOutput.innerHTML = marked.parse(data.result);
+      })
+      .catch(error => {
+        researchOutput.innerHTML = `<p class="text-red-500">Error: ${error}</p>`;
+      });
+    });
+
+    // PDF download function
+    async function downloadReport() {
+      // Get the generated research report content
+      const researchContent = document.getElementById('researchOutput').innerText.trim();
+      const { jsPDF } = window.jspdf;
+
+      // Create a new jsPDF instance with A4 dimensions
+      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+      // Set margins and font settings
+      const margin = 40;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const maxLineWidth = pageWidth - margin * 2;
+      const lineHeight = 14;  // Adjust this value for spacing between lines
+
+      doc.setFontSize(12);
+
+      // Split the text into lines that fit the width of the page
+      const textLines = doc.splitTextToSize(researchContent, maxLineWidth);
+
+      let cursorY = margin;
+
+      // Iterate over each line and add to the document with page breaks when necessary
+      textLines.forEach((line) => {
+        // If adding this line exceeds the page height, add a new page and reset cursorY
+        if (cursorY + lineHeight > pageHeight - margin) {
+          doc.addPage();
+          cursorY = margin;
+        }
+        // Print the line and move the cursor
+        doc.text(line, margin, cursorY);
+        cursorY += lineHeight;
+      });
+
+      // Save and download the PDF
+      doc.save('research_report.pdf');
+    }
+  </script>
+</body>
+</html>

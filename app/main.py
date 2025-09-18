@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import routes_home, routes_arxiv, routes_pdf, routes_ws
+from app.api import routes_home, routes_arxiv, routes_pdf, routes_ws, routes_webresearch
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 import os
@@ -28,6 +28,7 @@ app.mount("/static", StaticFiles(directory="app/templates"), name="static")
 app.include_router(routes_home.router)
 app.include_router(routes_arxiv.router)
 app.include_router(routes_pdf.router)
+app.include_router(routes_webresearch.router)
 
 # Health Check
 @app.get("/health")
