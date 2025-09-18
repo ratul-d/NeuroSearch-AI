@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse, HTMLResponse
-from app.services.web_research import ResearchDeps,research_agent
+from app.services.web_research_v2 import ResearchDeps,research_agent
 from pydantic import BaseModel
 import asyncio
 
